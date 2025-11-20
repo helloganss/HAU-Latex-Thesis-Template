@@ -1,0 +1,346 @@
+%=============================
+% 河南农业大学本科论文 LaTeX 模板
+% 当前进度：
+% 封面 + 原创性声明 + 授权书 + 目录
+% + 中英文摘要 + 正文章节结构 + 参考文献 + 致谢
+% 编译方式：XeLaTeX
+%=============================
+\documentclass[UTF8,oneside]{ctexrep} % 中文报告类
+
+% ---------- 页面设置 ----------
+\usepackage[a4paper,
+top=2.5cm,
+bottom=2.5cm,
+left=3cm,
+right=3cm]{geometry}
+
+% ---------- 常用宏包 ----------
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{setspace}
+\usepackage[hidelinks]{hyperref}
+\usepackage[absolute,overlay]{textpos}
+\usepackage[absolute,overlay]{textpos}
+
+% 使用 fontspec / xeCJK 定义方正小标宋简体
+\usepackage{xeCJK}
+\setCJKfamilyfont{xiaobiaosong}{方正小标宋简体}  % ← 注意：这里写系统字体名
+
+
+% ---------- 字体与行距 ----------
+\setmainfont{Times New Roman}   % 英文字体
+\setCJKmainfont{SimSun}         % 中文宋体
+
+% 全局行距先保持适中，正文里再单独设 20pt 固定行距
+\linespread{1.3}
+
+\pagestyle{plain}               % 页脚中间页码
+
+% ---------- 论文信息（在这里填自己的信息） ----------
+\newcommand{\schoolname}{河南农业大学}
+\newcommand{\thesistitleCN}{南阳市某肉联厂 $1800\,\mathrm{m}^3/\mathrm{d}$ 屠宰废水处理工程}
+\newcommand{\thesistitleEN}{A 1800\,m\textsuperscript{3}/d Slaughterhouse Wastewater Treatment Project of a Certain Meat Processing Plant in Nanyang}
+\newcommand{\studentname}{学生姓名}
+\newcommand{\studentid}{学号}
+\newcommand{\college}{学院名称}
+\newcommand{\major}{专业名称}
+\newcommand{\supervisor}{指导教师姓名}
+\newcommand{\writedate}{二〇二五年六月十六日}
+
+% 摘要内容占位（之后你可以改成自己的）
+\newcommand{\cnabstract}{这里填写中文摘要内容，这一段建议约 300～500 字，分 1～2 个自然段。}
+\newcommand{\cnkeywords}{关键词1；关键词2；关键词3}
+\newcommand{\enabstract}{Here you write your English abstract, usually 200--300 words, in one or two paragraphs.}
+\newcommand{\enkeywords}{keyword1; keyword2; keyword3}
+
+% ---------- 目录标题改为“目 录” ----------
+\renewcommand{\contentsname}{目\quad 录}
+
+% ---------- 正文章本环境：5号宋体 + 固定行距 20pt + 首行缩进两格 ----------
+\newenvironment{maintext}{%
+	\zihao{5}% 五号
+	\songti
+	\setlength{\parindent}{2em}% 段首空两格
+	\setlength{\baselineskip}{20pt}% 行间距固定值 20 磅
+}{}
+
+% ---------- 正文标题层次设置：1 / 1.1 / 1.1.1 / 1.1.1.1 ----------
+\setcounter{secnumdepth}{4} % 编号到 paragraph 层
+
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\renewcommand{\theparagraph}{\thesubsubsection.\arabic{paragraph}}
+
+\ctexset{
+	% 一级标题：1 ××××，4号黑体，居左
+	section = {
+		format += \heiti\zihao{4},
+		name = {},
+		number = \arabic{section},
+	},
+	% 二级标题：1.1 ××××，小4号黑体，居左
+	subsection = {
+		format += \heiti\zihao{-4},
+		name = {},
+		number = \thesubsection,
+	},
+	% 三级标题：1.1.1 ××××，5号黑体，居左
+	subsubsection = {
+		format += \heiti\zihao{5},
+		name = {},
+		number = \thesubsubsection,
+	},
+	% 四级标题：1.1.1.1 ××××，5号黑体，居左
+	paragraph = {
+		format += \heiti\zihao{5},
+		name = {},
+		number = \theparagraph,
+	},
+}
+
+% ---------- 封面 ----------
+% 封面命令：顶部放“校徽 + 校名”两张图片
+% 封面：左上角校徽 + 居中校名 + 本科生毕业论文（设计） + 题目 + 基本信息
+% 封面：左上角一行放 校徽 + 校名
+% 封面：左上角校徽 + 居中校名（不在同一行）
+\newcommand{\makecover}{%
+	\begin{titlepage}
+		\thispagestyle{empty} % 封面不显示页码
+		
+		% ===== 左上角校徽（绝对定位） =====
+		\begin{textblock*}{3cm}(2cm,1.8cm)
+			\includegraphics[width=2.5cm]{校徽}
+		\end{textblock*}
+		
+		% ===== 居中校名 =====
+		\vspace*{2.0cm} % 校名距上边的位置，觉得高/低可以微调
+		\begin{center}
+			\includegraphics[height=2.3cm]{校名}
+		\end{center}
+		
+		% ===== “本科生毕业论文（设计）” =====
+		\vspace{1.2cm}  % 原来是 1.8cm，稍微压缩一点
+		\begin{center}
+			{{\CJKfamily{xiaobiaosong}\fontsize{26pt}{26pt}\selectfont 本科生毕业论文（设计）}}
+		\end{center}
+		
+		% ===== 中英文题目 =====
+		\vspace{1cm}  % 原来是 2.0cm
+		\begin{center}
+			{\heiti\zihao{-2} \thesistitleCN}\\[0.6cm] % 原 0.8cm
+			{\bfseries\zihao{-2} \thesistitleEN}
+		\end{center}
+		
+		% ===== 学院、姓名、学号、专业、导师 =====
+		\vspace{2cm}  % 原来是 3.0cm
+		{\songti\zihao{3}
+			\begin{center}
+				学\quad \quad 院\underline{\makebox[18em][c]{\college}}\\[1.2em]
+				学生姓名\underline{\makebox[18em][c]{\studentname}}\\[1.2em]
+				学\quad \quad 号\underline{\makebox[18em][c]{\studentid}}\\[1.2em]
+				专\quad \quad 业\underline{\makebox[18em][c]{\major}}\\[1.2em]
+				指导教师\underline{\makebox[18em][c]{\supervisor}}
+			\end{center}
+		}
+		
+		% ===== 底部：学校 + 日期（固定间距，不用 \vfill） =====
+		\vspace{1.8cm}
+		\begin{center}
+			{\songti\zihao{3} \schoolname}\\[0.4cm]
+			{\songti\zihao{3} 撰写日期：\writedate}
+		\end{center}
+		
+	\end{titlepage}
+}
+
+% ---------- 原创性声明 ----------
+\newcommand{\makeoriginality}{%
+	\clearpage
+	\thispagestyle{empty}
+	\begin{center}
+		{\heiti\zihao{3} 河南农业大学\\[1em]}
+		{\heiti\zihao{3} 毕业论文（设计）原创性声明}
+	\end{center}
+	
+	\vspace{2em}
+	
+	{\songti\zihao{4}
+		本人郑重声明：所呈交的毕业论文（设计），是本人在指导教师指导下，进行研究工作所取得的成果。
+		除文中已经注明引用的内容外，本毕业论文（设计）的研究成果不包含任何他人创作的、已公开发表或者没有公开发表的作品的内容。
+		对本毕业论文（设计）所涉及的研究工作做出贡献的其他个人和集体，均已在文中以明确方式标明。
+		本学位毕业论文（设计）原创性声明的法律责任由本人承担。
+	}
+	
+	\vspace{4em}
+	
+	{\songti\zihao{4}
+		\begin{flushright}
+			指导教师签名：\hspace*{3em} \\[2em]
+			毕业论文（设计）作者签名：\hspace*{3em} \\[2em]
+			年\quad 月\quad 日\hspace*{3em}
+		\end{flushright}
+	}
+}
+
+% ---------- 版权使用授权书 ----------
+\newcommand{\makeauthorization}{%
+	\clearpage
+	\thispagestyle{empty}
+	\begin{center}
+		{\heiti\zihao{3} 河南农业大学\\[1em]}
+		{\heiti\zihao{3} 毕业论文（设计）版权使用授权书}
+	\end{center}
+	
+	\vspace{2em}
+	
+	{\songti\zihao{4}
+		本人完全了解河南农业大学关于收集、保存和使用学位毕业论文（设计）的规定，同意如下各项内容：
+		按照学校要求提交毕业论文（设计）的印刷本和电子版本；
+		学校有权保存毕业论文（设计）的印刷本和电子版，并采用影印、缩印、扫描、数字化或其它手段保存毕业论文（设计）；
+		学校有权提供目录检索以及提供本毕业论文（设计）全文或者部分的阅览服务；
+		学校有权按有关规定向国家有关部门或者机构送交毕业论文（设计）的复印件和电子版；
+		在不以赢利为目的的前提下，学校可以适当复制毕业论文（设计）的部分或全部内容用于学术活动。
+	}
+	
+	\vspace{4em}
+	
+	{\songti\zihao{4}
+		\begin{flushright}
+			指导教师签名：\hspace*{3em} \\[2em]
+			毕业论文（设计）作者签名：\hspace*{3em} \\[2em]
+			年\quad 月\quad 日\hspace*{3em}
+		\end{flushright}
+	}
+}
+
+% ---------- 中文摘要页面 ----------
+\newcommand{\makecnabstract}{%
+	\clearpage
+	\chapter*{摘\quad 要}
+	\addcontentsline{toc}{chapter}{摘\quad 要}%
+	{\songti\zihao{5}
+		\setlength{\baselineskip}{20pt}%
+		\cnabstract\par
+		\vspace{1em}
+		\textbf{关键词：}\cnkeywords
+	}
+}
+
+% ---------- 英文摘要页面 ----------
+\newcommand{\makeenabstract}{%
+	\clearpage
+	\chapter*{Abstract}
+	\addcontentsline{toc}{chapter}{Abstract}%
+	{\zihao{5}
+		\setlength{\baselineskip}{20pt}%
+		\enabstract\par
+		\vspace{1em}
+		\textbf{Key words: }\enkeywords
+	}
+}
+
+% ---------- 致谢标题 ----------
+\newcommand{\makeacknowledgement}{%
+	\clearpage
+	{\centering\heiti\zihao{3} 致\quad 谢\par}
+	\addcontentsline{toc}{section}{致谢}
+	\vspace{1em}
+}
+
+\begin{document}
+	
+	% ========== 封面（不编页码） ==========
+	\makecover
+	
+	% ========== 原创性声明（不编页码） ==========
+	\makeoriginality
+	
+	% ========== 版权使用授权书（不编页码） ==========
+	\makeauthorization
+	
+	% ========== 目录 + 摘要部分：罗马数字页码 ==========
+	\clearpage
+	\pagenumbering{Roman}   % I, II, III...
+	\setcounter{page}{1}
+	
+	% ---- 目录 ----
+	\tableofcontents
+	
+	% ---- 中文摘要 ----
+	\makecnabstract
+	
+	% ---- 英文摘要 ----
+	\makeenabstract
+	
+	% ========== 正文开始：阿拉伯数字页码 ==========
+	\clearpage
+	\pagenumbering{arabic}  % 1, 2, 3...
+	
+	\begin{maintext}
+		
+		% ---- 引言（不带数字）----
+		\section*{引言}
+		\addcontentsline{toc}{section}{引言}
+		
+		这里是引言（绪论）部分的正文示例。正式写作时，你可以分多段介绍研究背景、研究意义、国内外研究现状、研究目标与内容等。
+		
+		% ---- 1 材料与方法 ----
+		\section{材料与方法}
+		
+		这里写材料与方法的总述。注意段落自动首行缩进两格。
+		
+		\subsection{试验材料}
+		这里写试验材料的详细信息，例如土壤类型、植物材料、试剂、仪器等。
+		
+		\subsubsection{土壤样品}
+		这里是 1.1.1 级标题示例。
+		
+		\paragraph{采样方法}
+		这里是 1.1.1.1 级标题示例。如果你不用到四级标题，可以不写 paragraph。
+		
+		\subsection{试验方法}
+		这里写具体的试验步骤、分析方法、统计方法等。
+		
+		% ---- 2 结果与分析 ----
+		\section{结果与分析}
+		
+		这里是结果与分析的总述，可以分若干小节展示不同结果，并配图配表。
+		
+		\subsection{产量结果}
+		这里写试验测得的产量结果及其描述。
+		
+		\subsection{土壤理化性状变化}
+		这里写土壤理化性状指标的变化及分析。
+		
+		% ---- 3 结论与讨论 ----
+		\section{结论与讨论}
+		
+		这里总结全文的主要结论，并结合前人研究进行对比与讨论，可分小节展开。
+		
+		\subsection{主要结论}
+		条理化地列出 3～5 条主要结论。
+		
+		\subsection{讨论与展望}
+		联系现有研究，讨论不足与改进方向，提出进一步研究的设想。
+		
+		% ========== 参考文献 ==========
+		\clearpage
+		\begin{thebibliography}{99}
+			\addcontentsline{toc}{section}{参考文献} % 让“参考文献”出现在目录中
+			\bibitem{ref1} 这里是参考文献示例 1。
+			\bibitem{ref2} 这里是参考文献示例 2。
+		\end{thebibliography}
+		
+		
+		% ========== 致谢 ==========
+		\clearpage
+		\phantomsection
+		\addcontentsline{toc}{section}{致谢}
+		{\centering\heiti\zihao{3} 致\quad 谢\par}
+		感谢chatgpt。的、以自我为中心的完美世界，我们会丧失批判性思维和现实检验能力。韩炳哲在《爱欲之死》中谈到，真正的爱欲包含着对他者“异质性”（Otherness）的接纳，并在这种接纳中超越自我。极端自恋的“人机之恋”，人成了蜷缩在自我幻想中的“单向度的人”，失去了在真实关系中锤炼灵魂的可能。
+	\end{maintext}
+	
+\end{document}
